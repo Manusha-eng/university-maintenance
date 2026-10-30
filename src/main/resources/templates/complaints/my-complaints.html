@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Complaints</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>My Maintenance Complaints</h1>
+
+    <p>Here you can check the status of your submitted complaints.</p>
+
+    <p>
+        <a th:href="@{/}">Home</a> |
+        <a th:href="@{/complaints/new}">Submit New Complaint</a>
+    </p>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="complaint : ${complaints}">
+                    <td th:text="${complaint.id}"></td>
+                    <td th:text="${complaint.title}"></td>
+                    <td th:text="${complaint.location}"></td>
+                    <td th:text="${complaint.category}"></td>
+                    <td th:text="${complaint.priority}"></td>
+                    <td th:text="${complaint.status}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p th:if="${#lists.isEmpty(complaints)}">
+        You have not submitted any complaints yet.
+    </p>
+
+</div>
+
+</body>
+</html>

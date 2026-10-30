@@ -1,0 +1,71 @@
+
+# ========================================
+# University Maintenance Management System
+# Git Ignore Configuration
+# ========================================
+
+# Maven build files
+HELP.md
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Maven Wrapper
+# Keep .mvn, mvnw and mvnw.cmd tracked
+
+# Spring Tool Suite (STS)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Visual Studio Code
+.vscode/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local Spring Boot configuration
+src/main/resources/application-local.properties
+src/main/resources/application-secret.properties
+
+# Private keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini

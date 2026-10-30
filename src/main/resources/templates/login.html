@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - University Maintenance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>University Maintenance Login</h1>
+
+    <p>Enter your username and password.</p>
+
+    <p class="error" th:if="${param.error}">
+        Invalid username or password.
+    </p>
+
+    <p th:if="${param.logout}">
+        You have logged out successfully.
+    </p>
+
+    <form th:action="@{/login}" method="post">
+
+        <label for="username">Username</label>
+        <input type="text"
+               id="username"
+               name="username"
+               required>
+
+        <label for="password">Password</label>
+        <input type="password"
+               id="password"
+               name="password"
+               required>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <p><a th:href="@{/}">Back to Home</a></p>
+
+</div>
+
+</body>
+</html>

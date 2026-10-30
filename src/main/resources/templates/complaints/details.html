@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Complaint Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Complaint Details</h1>
+
+    <p>
+        <strong>Complaint ID:</strong>
+        <span th:text="${complaint.id}"></span>
+    </p>
+
+    <p>
+        <strong>Title:</strong>
+        <span th:text="${complaint.title}"></span>
+    </p>
+
+    <p>
+        <strong>Description:</strong>
+    </p>
+    <p th:text="${complaint.description}"></p>
+
+    <p>
+        <strong>Location:</strong>
+        <span th:text="${complaint.location}"></span>
+    </p>
+
+<p>
+    <strong>Building:</strong>
+    <span th:text="${complaint.building == null ? 'Not assigned' : complaint.building.name}">
+    </span>
+</p>
+
+    <p>
+        <strong>Category:</strong>
+        <span th:text="${complaint.category}"></span>
+    </p>
+
+    <p>
+        <strong>Priority:</strong>
+        <span th:text="${complaint.priority}"></span>
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        <span th:text="${complaint.status}"></span>
+    </p>
+
+<hr>
+
+<h2>AI Complaint Analysis</h2>
+
+<p>Click below to analyze this complaint using Gemini AI.</p>
+
+<form th:action="@{/complaints/{id}/analyze(id=${complaint.id})}"
+      method="post">
+    <button type="submit">Analyze with Gemini</button>
+</form>
+
+<div th:if="${aiSuggestion != null}">
+    <h3>Gemini Suggestions</h3>
+
+    <pre class="ai-result" th:text="${aiSuggestion}"></pre>
+
+    <p>
+        These are AI suggestions only.
+        The maintenance administrator should review them.
+    </p>
+</div>
+
+    <p>
+        <a th:href="@{/complaints/edit/{id}(id=${complaint.id})}">
+            Edit Complaint
+        </a>
+    </p>
+
+    <p>
+        <a th:href="@{/complaints}">
+            Back to Complaints
+        </a>
+    </p>
+
+</div>
+
+</body>
+</html>

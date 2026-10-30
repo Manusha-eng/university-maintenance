@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>University Maintenance System</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>University Maintenance Management System</h1>
+
+    <p>Welcome to the university maintenance portal.</p>
+
+    <!-- Display when not logged in -->
+    <div th:if="${!loggedIn}">
+
+        <p>Please log in to use the maintenance system.</p>
+
+        <p>
+            <a th:href="@{/login}">Login</a>
+        </p>
+
+    </div>
+
+    <!-- Display when logged in -->
+    <div th:if="${loggedIn}">
+
+        <p>
+            Logged in as:
+            <strong th:text="${username}"></strong>
+        </p>
+
+        <p>
+            <a th:href="@{/complaints/new}">
+                Submit a Complaint
+            </a>
+        </p>
+
+        <!-- Only students see this link -->
+        <p th:if="${isStudent}">
+            <a th:href="@{/complaints/mine}">
+                My Complaints
+            </a>
+        </p>
+
+        <!-- Only admins see this link -->
+        <p th:if="${isAdmin}">
+            <a th:href="@{/complaints}">
+                Manage Complaints
+            </a>
+        </p>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Logout</button>
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
