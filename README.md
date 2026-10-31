@@ -69,6 +69,36 @@ One building can have multiple complaints. Each complaint can be associated with
 
 The `submitted_by` field records the username of the account that submitted the complaint.
 
+
+### Entity Relationship Diagram
+
+```mermaid
+erDiagram
+    BUILDINGS |o--o{ COMPLAINTS : has
+
+    BUILDINGS {
+        BIGINT id PK
+        VARCHAR name UK
+    }
+
+    COMPLAINTS {
+        BIGINT id PK
+        VARCHAR title
+        VARCHAR description
+        VARCHAR location
+        VARCHAR category
+        VARCHAR priority
+        VARCHAR status
+        BIGINT building_id FK
+        VARCHAR submitted_by
+    }
+```
+
+The Building and Complaint entities have a many-to-one
+relationship. A building can have several complaints,
+while each complaint can be associated with at most one
+building. The building association is optional.
+
 ## How to Run the Project
 
 ### Requirements
