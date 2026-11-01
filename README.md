@@ -440,20 +440,65 @@ Run the automated unit tests with:
 
 Database-backed workflows must also be tested manually or with separate integration tests.
 
-## Screenshots and Demonstration
 
-The final demonstration should include:
 
-- Home and login pages
-- Complaint submission
-- Personal complaint tracking
-- Administrator complaint dashboard
-- Complaint edit and status history
-- Photograph upload and display
-- Gemini AI prioritisation
-- Mobile responsive layout
 
-Screenshots and the final demonstration video will be added as part of the project submission.
+## Project Screenshots
+
+The following screenshots demonstrate the main features of the
+University Maintenance Management System.
+
+### Homepage and Login
+
+| Homepage | Account Login |
+|---|---|
+| <img src="docs/screenshots/01-home.png" width="420" alt="Homepage"> | <img src="docs/screenshots/02-login.png" width="420" alt="Login Page"> |
+
+### Complaint Submission and Tracking
+
+| New Complaint Form | Student Dashboard |
+|---|---|
+| <img src="docs/screenshots/03-complaint-form.png" width="420" alt="Complaint Form"> | <img src="docs/screenshots/04-student-dashboard.png" width="420" alt="My Complaints"> |
+
+### Administrator Functions
+
+| Administrator Dashboard | Complaint Details |
+|---|---|
+| <img src="docs/screenshots/05-admin-dashboard.png" width="420" alt="Administrator Dashboard"> | <img src="docs/screenshots/06-complaint-details.png" width="420" alt="Complaint Details with Photograph"> |
+
+### Gemini AI Maintenance Prioritisation
+
+Gemini analyses the currently pending complaints and recommends
+up to three urgent maintenance tasks based on safety risks,
+reported information and maintenance requirements.
+
+<img src="docs/screenshots/07-gemini-analysis.png" width="750" alt="Gemini AI Maintenance Recommendations">
+
+AI recommendations are advisory. The maintenance administrator
+makes the final decision.
+
+### Mobile Responsive Interface
+
+The application is responsive and can be accessed through a
+mobile web browser.
+
+<img src="docs/screenshots/08-mobile.jpeg" width="230" alt="Mobile Homepage">
+
+## Live Application
+
+The application is deployed on Render.
+
+**Website:** https://university-maintenance.onrender.com
+
+The project uses an external MySQL database hosted on Aiven.
+
+## Demonstration Video
+
+A demonstration video will be prepared showing user
+authentication, complaint submission, CRUD operations,
+photograph upload, maintenance status tracking,
+Gemini analysis and mobile responsiveness.
+
 
 ## Limitations
 
