@@ -1,0 +1,521 @@
+
+/* Faculty of Engineering - Complaint Pages */
+
+body.complaint-page {
+    margin: 0;
+    padding: 0;
+    background: #f4f6f8;
+    color: #263444;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+
+.complaint-page * {
+    box-sizing: border-box;
+}
+
+/* Header */
+
+.complaint-header {
+    background: white;
+    border-bottom: 1px solid #d9dfe5;
+}
+
+.complaint-header-inner {
+    max-width: 1120px;
+    margin: auto;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+}
+
+.complaint-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.complaint-brand img {
+    width: 48px;
+    height: 53px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.complaint-brand-text small {
+    display: block;
+    color: #7a2e2e;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+
+.complaint-brand-text strong {
+    display: block;
+    margin-top: 3px;
+    color: #1f3552;
+    font-size: 17px;
+}
+
+.complaint-brand-text span {
+    display: block;
+    margin-top: 3px;
+    color: #687584;
+    font-size: 12px;
+}
+
+.complaint-nav {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.complaint-nav a {
+    color: #233e5a;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.complaint-nav a:hover {
+    color: #7a2e2e;
+    text-decoration: underline;
+}
+
+/* Page layout */
+
+.complaint-main {
+    max-width: 1080px;
+    margin: 30px auto;
+    padding: 0 18px;
+}
+
+.complaint-main.narrow {
+    max-width: 820px;
+}
+
+.complaint-panel {
+    padding: 30px;
+    background: white;
+    border: 1px solid #dce2e8;
+    border-radius: 8px;
+}
+
+.complaint-heading {
+    margin-bottom: 23px;
+}
+
+.complaint-heading h1 {
+    margin: 0 0 8px;
+    font-size: 27px;
+    color: #1f3552;
+}
+
+.complaint-heading p {
+    margin: 0;
+    color: #657384;
+    font-size: 14px;
+}
+
+.complaint-section-title {
+    margin: 24px 0 15px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid #e5e9ee;
+    color: #29415c;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+/* Form elements */
+
+.complaint-form .form-group {
+    margin-bottom: 19px;
+}
+
+.complaint-form label,
+.filter-form label {
+    display: block;
+    margin: 0 0 7px;
+    color: #344456;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.complaint-form input,
+.complaint-form textarea,
+.complaint-form select,
+.filter-form input,
+.filter-form select {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #c8d0d9;
+    border-radius: 5px;
+    background: white;
+    color: #263444;
+    font: inherit;
+}
+
+.complaint-form input:focus,
+.complaint-form textarea:focus,
+.complaint-form select:focus,
+.filter-form input:focus,
+.filter-form select:focus {
+    border-color: #7a2e2e;
+    outline: 2px solid #eddada;
+    outline-offset: 1px;
+}
+
+.complaint-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-hint {
+    display: block;
+    margin-top: 6px;
+    color: #718092;
+    font-size: 12px;
+}
+
+.required-mark {
+    color: #a52d2d;
+}
+
+.form-error {
+    margin: 7px 0 0;
+    color: #ae2929;
+    font-size: 13px;
+}
+
+/* Two-column fields */
+
+.form-row,
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.filter-grid {
+    grid-template-columns: 1.5fr 1fr 1fr;
+    align-items: end;
+}
+
+/* Buttons */
+
+.complaint-page .primary-button,
+.complaint-page .secondary-button,
+.complaint-page .danger-button {
+    display: inline-block;
+    padding: 10px 17px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.complaint-page .primary-button {
+    background: #7a2e2e;
+    border: 1px solid #7a2e2e;
+    color: white;
+}
+
+.complaint-page .primary-button:hover {
+    background: #622525;
+    color: white;
+    text-decoration: none;
+}
+
+.complaint-page .secondary-button {
+    background: white;
+    border: 1px solid #cbd3dc;
+    color: #233e5a;
+}
+
+.complaint-page .secondary-button:hover {
+    background: #f4f6f8;
+    text-decoration: none;
+}
+
+.complaint-page .danger-button {
+    background: white;
+    border: 1px solid #c98282;
+    color: #a32f2f;
+    padding: 7px 11px;
+    font-size: 12px;
+}
+
+.complaint-page .danger-button:hover {
+    background: #fff1f1;
+}
+
+.form-actions,
+.filter-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.form-actions button,
+.filter-actions button {
+    margin: 0;
+}
+
+.info-note {
+    margin: 20px 0;
+    padding: 12px 15px;
+    border-left: 3px solid #a8b5c3;
+    background: #f7f9fb;
+    color: #526477;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* Admin list */
+
+.filter-panel {
+    background: #fafbfc;
+    border: 1px solid #e0e5eb;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 26px;
+}
+
+.filter-form .filter-field {
+    min-width: 0;
+}
+
+.complaint-list-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+    background: white;
+}
+
+.complaint-list-table th {
+    padding: 12px;
+    text-align: left;
+    font-size: 13px;
+    color: #2d4259;
+    background: #edf1f5;
+    border-bottom: 1px solid #d9e0e7;
+}
+
+.complaint-list-table td {
+    padding: 13px 12px;
+    font-size: 13px;
+    border-bottom: 1px solid #e6e9ed;
+    vertical-align: middle;
+}
+
+.complaint-list-table tbody tr:hover {
+    background: #fafbfc;
+}
+
+.complaint-list-table .record-title {
+    font-weight: bold;
+    color: #263e58;
+}
+
+.complaint-page .record-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.record-actions form {
+    margin: 0;
+}
+
+.record-actions a {
+    font-size: 13px;
+}
+
+/* Status labels */
+
+.status-label {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+    background: #edf0f3;
+    color: #425164;
+}
+
+.status-label.is-pending {
+    background: #fff4dc;
+    color: #85600e;
+}
+
+.status-label.is-progress {
+    background: #e7f0fa;
+    color: #225c8f;
+}
+
+.status-label.is-completed {
+    background: #e5f4e9;
+    color: #276b3e;
+}
+
+/* Phone-sized complaint cards */
+
+.mobile-records {
+    display: none;
+}
+
+.mobile-record {
+    padding: 17px;
+    margin-bottom: 12px;
+    background: #fff;
+    border: 1px solid #dce2e8;
+    border-radius: 6px;
+}
+
+.mobile-record h3 {
+    margin: 0 0 11px;
+    color: #1f3552;
+    font-size: 16px;
+}
+
+.mobile-record p {
+    margin: 7px 0;
+    color: #526477;
+    font-size: 13px;
+}
+
+.mobile-record .record-actions {
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px solid #e8ecf0;
+}
+
+.empty-message {
+    padding: 22px;
+    text-align: center;
+    background: #f8fafc;
+    border: 1px solid #e0e5eb;
+    border-radius: 5px;
+    color: #607082;
+}
+
+/* Footer */
+
+.complaint-footer {
+    padding: 15px 20px 30px;
+    color: #718092;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* Responsive layout */
+
+@media (max-width: 800px) {
+    .complaint-header-inner {
+        flex-wrap: wrap;
+    }
+
+    .filter-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .filter-field:first-child {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 600px) {
+    .complaint-header-inner {
+        padding: 14px;
+    }
+
+    .complaint-brand {
+        gap: 7px;
+    }
+
+    .complaint-brand img {
+        width: 38px;
+        height: 44px;
+    }
+
+    .complaint-brand-text strong {
+        font-size: 14px;
+    }
+
+    .complaint-brand-text small {
+        font-size: 9px;
+    }
+
+    .complaint-brand-text span {
+        font-size: 10px;
+    }
+
+    .complaint-nav {
+        width: 100%;
+        gap: 16px;
+    }
+
+    .complaint-main {
+        margin: 16px auto;
+        padding: 0 11px;
+    }
+
+    .complaint-panel {
+        padding: 20px 15px;
+    }
+
+    .complaint-heading h1 {
+        font-size: 23px;
+    }
+
+    .form-row,
+    .filter-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .filter-field:first-child {
+        grid-column: auto;
+    }
+
+    .filter-panel {
+        padding: 15px;
+    }
+
+    .filter-field {
+        margin-bottom: 15px;
+    }
+
+    .desktop-records {
+        display: none;
+    }
+
+    .mobile-records {
+        display: block;
+    }
+
+    .complaint-form input,
+    .complaint-form select,
+    .complaint-form textarea,
+    .filter-form input,
+    .filter-form select {
+        font-size: 16px;
+    }
+
+    .form-actions .primary-button,
+    .form-actions .secondary-button {
+        width: 100%;
+    }
+}

@@ -1,56 +1,449 @@
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>My Complaints</title>
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Complaints | Faculty Maintenance</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/complaints.css}">
+
+    <style>
+        .student-info {
+            padding: 14px 16px;
+            margin-bottom: 22px;
+            background: #f8f9fb;
+            border-left: 3px solid #7a2e2e;
+            color: #526477;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .student-message {
+            padding: 13px 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .student-message.success {
+            background: #edf7ef;
+            border: 1px solid #bddfc5;
+            color: #276b3e;
+        }
+
+        .student-message.error {
+            background: #fff2f2;
+            border: 1px solid #e7bcbc;
+            color: #a12e2e;
+        }
+
+        .student-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 25px 0 16px;
+        }
+
+        .student-summary h2 {
+            margin: 0;
+            font-size: 19px;
+            color: #1f3552;
+        }
+
+        .student-count {
+            color: #607184;
+            font-size: 13px;
+        }
+
+        .student-table {
+            width: 100%;
+            min-width: 760px;
+            border-collapse: collapse;
+        }
+
+        .student-table th {
+            padding: 12px;
+            background: #edf1f5;
+            border-bottom: 1px solid #d9e0e7;
+            color: #29415c;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        .student-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e6e9ed;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .student-title {
+            font-weight: bold;
+            color: #263e58;
+        }
+
+        .student-edit-link {
+            display: inline-block;
+            padding: 7px 12px;
+            background: #ffffff;
+            border: 1px solid #c9d1d9;
+            border-radius: 5px;
+            color: #1f3552;
+            font-size: 13px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .student-edit-link:hover {
+            background: #f2f4f6;
+            color: #7a2e2e;
+            text-decoration: none;
+        }
+
+        .editing-closed {
+            color: #7b8795;
+            font-size: 12px;
+        }
+
+        .student-empty {
+            padding: 30px 20px;
+            text-align: center;
+            background: #fafbfc;
+            border: 1px solid #dce2e8;
+            border-radius: 6px;
+        }
+
+        .student-empty h2 {
+            margin: 0 0 10px;
+            font-size: 19px;
+            color: #1f3552;
+        }
+
+        .student-empty p {
+            margin-bottom: 20px;
+            color: #637487;
+            font-size: 14px;
+        }
+
+        .student-actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .student-mobile-action {
+            margin-top: 14px;
+            padding-top: 13px;
+            border-top: 1px solid #e8ecf0;
+        }
+
+        @media (max-width: 600px) {
+            .student-summary {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .student-actions a {
+                width: 100%;
+            }
+
+            .student-mobile-action .student-edit-link {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
-<body>
 
-<div class="container">
+<body class="complaint-page">
 
-    <h1>My Maintenance Complaints</h1>
+<header class="complaint-header">
+    <div class="complaint-header-inner">
 
-    <p>Here you can check the status of your submitted complaints.</p>
+        <div class="complaint-brand">
 
-    <p>
-        <a th:href="@{/}">Home</a> |
-        <a th:href="@{/complaints/new}">Submit New Complaint</a>
-    </p>
+            <img th:src="@{/images/University_of_Ruhuna_logo.png}"
+                 alt="University of Ruhuna Logo">
 
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Location</th>
-                    <th>Category</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
+            <img th:src="@{/images/images.jpg}"
+                 alt="Faculty of Engineering Logo">
 
-            <tbody>
-                <tr th:each="complaint : ${complaints}">
-                    <td th:text="${complaint.id}"></td>
-                    <td th:text="${complaint.title}"></td>
-                    <td th:text="${complaint.location}"></td>
-                    <td th:text="${complaint.category}"></td>
-                    <td th:text="${complaint.priority}"></td>
-                    <td th:text="${complaint.status}"></td>
-                </tr>
-            </tbody>
-        </table>
+            <div class="complaint-brand-text">
+                <small>University of Ruhuna</small>
+                <strong>Faculty of Engineering</strong>
+                <span>Maintenance Management System</span>
+            </div>
+
+        </div>
+
+        <nav class="complaint-nav">
+            <a th:href="@{/}">Home</a>
+
+            <a th:href="@{/complaints/new}">
+                New Complaint
+            </a>
+        </nav>
+
+    </div>
+</header>
+
+<main class="complaint-main">
+
+    <div class="complaint-panel">
+
+        <div class="complaint-heading">
+            <h1>My Maintenance Complaints</h1>
+
+            <p>
+                View your submitted maintenance requests,
+                check their status and edit pending complaints.
+            </p>
+        </div>
+
+        <!-- Success and error messages -->
+
+        <div class="student-message success"
+             th:if="${editSuccess != null}"
+             th:text="${editSuccess}"
+             role="status">
+            Complaint updated successfully.
+        </div>
+
+        <div class="student-message error"
+             th:if="${editError != null}"
+             th:text="${editError}"
+             role="alert">
+            This complaint cannot be edited.
+        </div>
+
+        <div class="student-info">
+            You can update your complaint while its status
+            is Pending. Once the maintenance administrator
+            starts processing it, editing will be disabled.
+            You can still track its status here.
+        </div>
+
+        <div class="student-summary">
+            <h2>Submitted Complaints</h2>
+
+            <div class="student-count">
+                Total Complaints:
+                <strong th:text="${#lists.size(complaints)}">
+                    0
+                </strong>
+            </div>
+        </div>
+
+        <!-- Empty state -->
+
+        <div class="student-empty"
+             th:if="${#lists.isEmpty(complaints)}">
+
+            <h2>No Complaints Submitted</h2>
+
+            <p>
+                You haven't submitted any maintenance
+                complaints yet.
+            </p>
+
+            <a class="primary-button"
+               th:href="@{/complaints/new}">
+                Submit Your First Complaint
+            </a>
+        </div>
+
+        <!-- Desktop Table -->
+
+        <div class="desktop-records"
+             th:unless="${#lists.isEmpty(complaints)}">
+
+            <div class="table-wrapper">
+
+                <table class="student-table">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Complaint</th>
+                            <th>Location</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr th:each="complaint : ${complaints}">
+
+                            <td th:text="${complaint.id}">
+                                1
+                            </td>
+
+                            <td class="student-title"
+                                th:text="${complaint.title}">
+                                Broken projector
+                            </td>
+
+                            <td th:text="${complaint.location}">
+                                Room 205
+                            </td>
+
+                            <td th:text="${complaint.category}">
+                                ELECTRICAL
+                            </td>
+
+                            <td th:text="${complaint.priority}">
+                                MEDIUM
+                            </td>
+
+                            <td>
+                                <span class="status-label"
+                                      th:classappend="${complaint.status == 'PENDING'
+                                        ? 'is-pending'
+                                        : (complaint.status == 'IN_PROGRESS'
+                                        ? 'is-progress'
+                                        : (complaint.status == 'COMPLETED'
+                                        ? 'is-completed'
+                                        : ''))}"
+                                      th:text="${complaint.status == null
+                                        ? 'NOT SET'
+                                        : #strings.replace(complaint.status, '_', ' ')}">
+                                    PENDING
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <a class="student-edit-link"
+                                   th:if="${complaint.status == 'PENDING'}"
+                                   th:href="@{/complaints/my/edit/{id}(id=${complaint.id})}">
+                                    Edit
+                                </a>
+
+                                <span class="editing-closed"
+                                      th:unless="${complaint.status == 'PENDING'}">
+                                    Editing closed
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- Mobile Cards -->
+
+        <div class="mobile-records"
+             th:unless="${#lists.isEmpty(complaints)}">
+
+            <article class="mobile-record"
+                     th:each="complaint : ${complaints}">
+
+                <h3 th:text="${complaint.title}">
+                    Broken projector
+                </h3>
+
+                <p>
+                    <strong>Complaint ID:</strong>
+                    <span th:text="${complaint.id}">1</span>
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    <span th:text="${complaint.location}">
+                        Room 205
+                    </span>
+                </p>
+
+                <p>
+                    <strong>Category:</strong>
+                    <span th:text="${complaint.category}">
+                        ELECTRICAL
+                    </span>
+                </p>
+
+                <p>
+                    <strong>Reported Priority:</strong>
+                    <span th:text="${complaint.priority}">
+                        MEDIUM
+                    </span>
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+
+                    <span class="status-label"
+                          th:classappend="${complaint.status == 'PENDING'
+                            ? 'is-pending'
+                            : (complaint.status == 'IN_PROGRESS'
+                            ? 'is-progress'
+                            : (complaint.status == 'COMPLETED'
+                            ? 'is-completed'
+                            : ''))}"
+                          th:text="${complaint.status == null
+                            ? 'NOT SET'
+                            : #strings.replace(complaint.status, '_', ' ')}">
+                        PENDING
+                    </span>
+                </p>
+
+                <div class="student-mobile-action">
+
+                    <a class="student-edit-link"
+                       th:if="${complaint.status == 'PENDING'}"
+                       th:href="@{/complaints/my/edit/{id}(id=${complaint.id})}">
+                        Edit Complaint
+                    </a>
+
+                    <span class="editing-closed"
+                          th:unless="${complaint.status == 'PENDING'}">
+                        Editing is no longer available.
+                    </span>
+
+                </div>
+
+            </article>
+
+        </div>
+
+        <div class="student-actions">
+
+            <a class="primary-button"
+               th:href="@{/complaints/new}">
+                Submit New Complaint
+            </a>
+
+            <a class="secondary-button"
+               th:href="@{/}">
+                Back to Home
+            </a>
+
+        </div>
+
     </div>
 
-    <p th:if="${#lists.isEmpty(complaints)}">
-        You have not submitted any complaints yet.
-    </p>
+</main>
 
-</div>
+<footer class="complaint-footer">
+    Faculty of Engineering, University of Ruhuna
+</footer>
 
 </body>
 </html>

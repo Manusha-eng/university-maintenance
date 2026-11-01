@@ -1,48 +1,369 @@
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Login - University Maintenance</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login | University Maintenance System</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <style>
+        body.login-page {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f8;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1f2d3d;
+        }
+
+        /* University header */
+
+        .site-header {
+            background: #ffffff;
+            border-bottom: 1px solid #d8dde3;
+        }
+
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        .branding {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .branding img {
+            width: 58px;
+            height: 58px;
+            object-fit: contain;
+        }
+
+        .branding-text small {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #7a2e2e;
+        }
+
+        .branding-text h1 {
+            margin: 0;
+            font-size: 18px;
+            color: #1f3552;
+        }
+
+        .branding-text p {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: #556575;
+        }
+
+        .header-nav a {
+            padding: 9px 12px;
+            color: #1f3552;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .header-nav a:hover {
+            background-color: #f3f4f6;
+            border-radius: 4px;
+        }
+
+        /* Login section */
+
+        .login-section {
+            max-width: 480px;
+            margin: 65px auto 30px;
+            padding: 0 15px;
+        }
+
+        .login-card {
+            background: #ffffff;
+            border: 1px solid #d8dde3;
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .login-card h2 {
+            margin: 0 0 8px;
+            font-size: 25px;
+            color: #1f3552;
+        }
+
+        .login-description {
+            margin-bottom: 25px;
+            color: #657384;
+            font-size: 14px;
+        }
+
+        /* Login form */
+
+        .login-form label {
+            display: block;
+            margin: 16px 0 7px;
+            color: #344456;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #c6ced7;
+            border-radius: 5px;
+            background-color: #ffffff;
+            color: #263444;
+            font-size: 15px;
+        }
+
+        .login-form input:focus {
+            border-color: #7a2e2e;
+            outline: 2px solid #ead7d7;
+            outline-offset: 1px;
+        }
+
+        .login-button {
+            display: block;
+            width: 100%;
+            margin-top: 24px;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #7a2e2e;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-button:hover {
+            background-color: #612424;
+        }
+
+        /* Messages */
+
+        .message-error {
+            padding: 11px 13px;
+            margin: 15px 0;
+            border: 1px solid #edc3c3;
+            border-radius: 5px;
+            background-color: #fff2f2;
+            color: #a12626;
+            font-size: 13px;
+        }
+
+        .message-success {
+            padding: 11px 13px;
+            margin: 15px 0;
+            border: 1px solid #b8d9c1;
+            border-radius: 5px;
+            background-color: #f0faf2;
+            color: #246b3b;
+            font-size: 13px;
+        }
+
+        .back-link {
+            margin-top: 22px;
+            text-align: center;
+        }
+
+        .back-link a {
+            font-size: 14px;
+            text-decoration: none;
+            color: #435a72;
+        }
+
+        .back-link a:hover {
+            color: #7a2e2e;
+            text-decoration: underline;
+        }
+
+        /* Footer */
+
+        .site-footer {
+            margin: 35px auto 20px;
+            padding: 0 15px;
+            text-align: center;
+            color: #788493;
+            font-size: 12px;
+        }
+
+        /* Mobile responsiveness */
+
+        @media (max-width: 600px) {
+            .header-inner {
+                padding: 14px;
+            }
+
+            .branding {
+                gap: 9px;
+            }
+
+            .branding img {
+                width: 42px;
+                height: 45px;
+            }
+
+            .branding-text small {
+                font-size: 10px;
+            }
+
+            .branding-text h1 {
+                font-size: 16px;
+            }
+
+            .branding-text p {
+                font-size: 11px;
+            }
+
+            .login-section {
+                margin-top: 28px;
+                padding: 0 14px;
+            }
+
+            .login-card {
+                padding: 23px 20px;
+            }
+
+            .login-card h2 {
+                font-size: 23px;
+            }
+
+            .login-form input {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
-<body>
 
-<div class="container">
+<body class="login-page">
 
-    <h1>University Maintenance Login</h1>
+<!-- University Header -->
 
-    <p>Enter your username and password.</p>
+<header class="site-header">
+    <div class="header-inner">
 
-    <p class="error" th:if="${param.error}">
-        Invalid username or password.
-    </p>
+        <div class="branding">
 
-    <p th:if="${param.logout}">
-        You have logged out successfully.
-    </p>
+            <img th:src="@{/images/University_of_Ruhuna_logo.png}"
+                 alt="University of Ruhuna Logo">
 
-    <form th:action="@{/login}" method="post">
+            <img th:src="@{/images/images.jpg}"
+                 alt="Faculty of Engineering Logo">
 
-        <label for="username">Username</label>
-        <input type="text"
-               id="username"
-               name="username"
-               required>
+            <div class="branding-text">
 
-        <label for="password">Password</label>
-        <input type="password"
-               id="password"
-               name="password"
-               required>
+                <small>University of Ruhuna</small>
 
-        <button type="submit">Login</button>
+                <h1>Faculty of Engineering</h1>
 
-    </form>
+                <p>
+                    Maintenance Request &amp;
+                    Complaint Management System
+                </p>
 
-    <p><a th:href="@{/}">Back to Home</a></p>
+            </div>
+        </div>
 
-</div>
+        <nav class="header-nav">
+            <a th:href="@{/}">Home</a>
+        </nav>
+
+    </div>
+</header>
+
+<!-- Login Form -->
+
+<main class="login-section">
+
+    <section class="login-card">
+
+        <h2>Account Login</h2>
+
+        <p class="login-description">
+            Sign in to access the maintenance management system.
+        </p>
+
+        <!-- Invalid login message -->
+
+        <div class="message-error"
+             th:if="${param.error}">
+            Invalid username or password.
+            Please try again.
+        </div>
+
+        <!-- Successful logout message -->
+
+        <div class="message-success"
+             th:if="${param.logout}">
+            You have logged out successfully.
+        </div>
+
+        <form class="login-form"
+              th:action="@{/login}"
+              method="post">
+
+            <label for="username">
+                Username
+            </label>
+
+            <input type="text"
+                   id="username"
+                   name="username"
+                   placeholder="Enter your username"
+                   autocomplete="username"
+                   required
+                   autofocus>
+
+            <label for="password">
+                Password
+            </label>
+
+            <input type="password"
+                   id="password"
+                   name="password"
+                   placeholder="Enter your password"
+                   autocomplete="current-password"
+                   required>
+
+            <button class="login-button"
+                    type="submit">
+                Login
+            </button>
+
+        </form>
+
+        <div class="back-link">
+            <a th:href="@{/}">
+                Back to Home
+            </a>
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    Faculty of Engineering, University of Ruhuna
+</footer>
 
 </body>
 </html>

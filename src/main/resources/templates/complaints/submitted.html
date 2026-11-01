@@ -1,24 +1,170 @@
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Complaint Submitted</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Complaint Submitted | Faculty Maintenance</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/complaints.css}">
+
+    <style>
+        .success-content {
+            max-width: 630px;
+            margin: 12px auto;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .success-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 66px;
+            height: 66px;
+            margin: 0 auto 22px;
+            border-radius: 50%;
+            background: #e7f3eb;
+            color: #277343;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .success-content h1 {
+            margin-bottom: 12px;
+            color: #1f3552;
+            font-size: 26px;
+        }
+
+        .success-content p {
+            color: #617184;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .success-note {
+            margin: 22px 0;
+            padding: 14px;
+            background: #f8f9fb;
+            border: 1px solid #e2e6eb;
+            border-radius: 5px;
+            color: #586b7e;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .success-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 600px) {
+            .success-content {
+                padding: 18px 5px;
+            }
+
+            .success-content h1 {
+                font-size: 23px;
+            }
+
+            .success-actions a {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-<body>
 
-<div class="container">
+<body class="complaint-page">
 
-    <h1>Complaint Submitted</h1>
+<header class="complaint-header">
+    <div class="complaint-header-inner">
 
-    <p>Your maintenance complaint has been saved successfully.</p>
-    <p>The maintenance administrator can review the complaint.</p>
+        <div class="complaint-brand">
 
-    <a th:href="@{/complaints/new}">Submit Another Complaint</a>
+            <img th:src="@{/images/University_of_Ruhuna_logo.png}"
+                 alt="University of Ruhuna Logo">
 
-    <p><a th:href="@{/}">Back to Home</a></p>
+            <img th:src="@{/images/images.jpg}"
+                 alt="Faculty of Engineering Logo">
 
-</div>
+            <div class="complaint-brand-text">
+                <small>University of Ruhuna</small>
+                <strong>Faculty of Engineering</strong>
+                <span>Maintenance Management System</span>
+            </div>
+
+        </div>
+
+        <nav class="complaint-nav">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/complaints/new}">
+                New Complaint
+            </a>
+        </nav>
+
+    </div>
+</header>
+
+<main class="complaint-main narrow">
+
+    <div class="complaint-panel">
+
+        <section class="success-content">
+
+            <div class="success-icon" aria-hidden="true">
+                &#10003;
+            </div>
+
+            <h1>Complaint Submitted Successfully</h1>
+
+            <p>
+                Your maintenance complaint has been
+                saved successfully.
+            </p>
+
+            <p>
+                The maintenance administrator can now
+                review the submitted information
+                and take the necessary action.
+            </p>
+
+            <div class="success-note">
+                Your complaint has been recorded in
+                the maintenance management system.
+                You can check its status through
+                your account.
+            </div>
+
+            <div class="success-actions">
+
+                <a class="primary-button"
+                   th:href="@{/complaints/new}">
+                    Submit Another Complaint
+                </a>
+
+                <a class="secondary-button"
+                   th:href="@{/}">
+                    Back to Home
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+<footer class="complaint-footer">
+    Faculty of Engineering, University of Ruhuna
+</footer>
 
 </body>
 </html>

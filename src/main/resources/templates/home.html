@@ -1,66 +1,486 @@
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>University Maintenance System</title>
+    <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, initial-scale=1">
+          content="width=device-width, initial-scale=1.0">
+
+    <title>University Maintenance Management System</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        body.home-page {
+            margin: 0;
+            padding: 0;
+            background: #f4f6f8;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1f2d3d;
+        }
+
+        .site-header {
+            background: white;
+            border-bottom: 1px solid #d8dde3;
+        }
+
+        .site-header-inner {
+            max-width: 1100px;
+            margin: auto;
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .branding {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .branding img {
+            width: 58px;
+            height: 58px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .branding-text small {
+            display: block;
+            color: #7a2e2e;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 3px;
+        }
+
+        .branding-text h1 {
+            margin: 0;
+            color: #1f3552;
+            font-size: 18px;
+        }
+
+        .branding-text p {
+            margin: 4px 0 0;
+            color: #556575;
+            font-size: 13px;
+        }
+
+        .top-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .top-links a {
+            padding: 8px 10px;
+            border-radius: 4px;
+            color: #1f3552;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .top-links a:hover {
+            background: #f3f4f6;
+            text-decoration: none;
+        }
+
+        .page-wrap {
+            max-width: 1100px;
+            margin: 28px auto;
+            padding: 0 20px;
+        }
+
+        .main-panel {
+            background: white;
+            border: 1px solid #d8dde3;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+
+        .main-panel h2 {
+            margin: 0 0 12px;
+            color: #1f3552;
+            font-size: 27px;
+        }
+
+        .intro-text {
+            color: #4f5f70;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .user-info {
+            margin-top: 22px;
+            padding: 15px 17px;
+            background: #f8f9fb;
+            border-left: 4px solid #7a2e2e;
+            border-radius: 4px;
+            color: #34495c;
+            font-size: 14px;
+        }
+
+        .user-info p {
+            margin: 4px 0;
+        }
+
+        .section-title {
+            margin: 27px 0 15px;
+            color: #1f3552;
+            font-size: 20px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .action-card {
+            padding: 21px;
+            background: #fafbfc;
+            border: 1px solid #d8dde3;
+            border-radius: 7px;
+        }
+
+        .action-card h3 {
+            margin: 0 0 10px;
+            color: #1f3552;
+            font-size: 18px;
+        }
+
+        .action-card p {
+            min-height: 65px;
+            margin: 0 0 17px;
+            color: #5a6977;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .action-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 4px;
+            background: #7a2e2e;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: #612424;
+            color: white;
+            text-decoration: none;
+        }
+
+        .secondary-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            border: 1px solid #c9d1d9;
+            border-radius: 4px;
+            background: white;
+            color: #1f3552;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .secondary-btn:hover {
+            background: #f2f4f6;
+            text-decoration: none;
+        }
+
+        .logout-form {
+            margin-top: 22px;
+        }
+
+        .logout-form button {
+            padding: 10px 17px;
+            border: none;
+            border-radius: 4px;
+            background: #1f3552;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .logout-form button:hover {
+            background: #182b42;
+        }
+
+        .site-footer {
+            max-width: 1100px;
+            margin: 30px auto 20px;
+            padding: 0 20px;
+            color: #667788;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .site-header-inner {
+                padding: 14px;
+            }
+
+            .branding {
+                gap: 9px;
+            }
+
+            .branding img {
+                width: 42px;
+                height: 46px;
+            }
+
+            .branding-text h1 {
+                font-size: 16px;
+            }
+
+            .branding-text p {
+                font-size: 11px;
+            }
+
+            .page-wrap {
+                margin: 16px auto;
+                padding: 0 12px;
+            }
+
+            .main-panel {
+                padding: 21px 17px;
+            }
+
+            .main-panel h2 {
+                font-size: 23px;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-card p {
+                min-height: 0;
+            }
+
+            .top-links {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-<body>
 
-<div class="container">
+<body class="home-page">
 
-    <h1>University Maintenance Management System</h1>
+<header class="site-header">
 
-    <p>Welcome to the university maintenance portal.</p>
+    <div class="site-header-inner">
 
-    <!-- Display when not logged in -->
-    <div th:if="${!loggedIn}">
+        <div class="branding">
 
-        <p>Please log in to use the maintenance system.</p>
+            <img th:src="@{/images/University_of_Ruhuna_logo.png}"
+                 alt="University of Ruhuna Logo">
 
-        <p>
-            <a th:href="@{/login}">Login</a>
-        </p>
+            <img th:src="@{/images/images.jpg}"
+                 alt="Faculty of Engineering Logo">
 
-    </div>
+            <div class="branding-text">
 
-    <!-- Display when logged in -->
-    <div th:if="${loggedIn}">
+                <small>University of Ruhuna</small>
 
-        <p>
-            Logged in as:
-            <strong th:text="${username}"></strong>
-        </p>
+                <h1>Faculty of Engineering</h1>
 
-        <p>
-            <a th:href="@{/complaints/new}">
-                Submit a Complaint
+                <p>
+                    Maintenance Request &amp;
+                    Complaint Management System
+                </p>
+
+            </div>
+
+        </div>
+
+        <nav class="top-links">
+
+            <a th:href="@{/}">
+                Home
             </a>
-        </p>
 
-        <!-- Only students see this link -->
-        <p th:if="${isStudent}">
-            <a th:href="@{/complaints/mine}">
+            <a th:if="${isReporter}"
+               th:href="@{/complaints/mine}">
                 My Complaints
             </a>
-        </p>
 
-        <!-- Only admins see this link -->
-        <p th:if="${isAdmin}">
-            <a th:href="@{/complaints}">
+            <a th:if="${isAdmin}"
+               th:href="@{/complaints}">
                 Manage Complaints
             </a>
-        </p>
 
-        <form th:action="@{/logout}" method="post">
-            <button type="submit">Logout</button>
-        </form>
+            <a th:if="${!loggedIn}"
+               th:href="@{/login}">
+                Login
+            </a>
+
+        </nav>
 
     </div>
 
-</div>
+</header>
+
+<main class="page-wrap">
+
+    <section class="main-panel">
+
+        <h2>Welcome to the Maintenance Portal</h2>
+
+        <p class="intro-text">
+            This system allows students, lecturers and
+            non-academic staff to report maintenance
+            issues within the Faculty of Engineering,
+            University of Ruhuna.
+        </p>
+
+        <p class="intro-text">
+            Maintenance complaints may include electrical
+            faults, plumbing issues, damaged furniture,
+            classroom equipment failures, laboratory
+            facilities and other university maintenance
+            requirements.
+        </p>
+
+        <!-- Logged-in account information -->
+
+        <div class="user-info"
+             th:if="${loggedIn}">
+
+            <p>
+                Logged in as:
+                <strong th:text="${username}">
+                    username
+                </strong>
+            </p>
+
+            <p>
+                Account Role:
+                <strong th:text="${roleName}">
+                    Student
+                </strong>
+            </p>
+
+        </div>
+
+        <h3 class="section-title">Available Actions</h3>
+
+        <div class="action-grid">
+
+            <!-- Reporter and administrator submission -->
+
+            <div class="action-card"
+                 th:if="${loggedIn}">
+
+                <h3>Submit Complaint</h3>
+
+                <p>
+                    Report a maintenance issue and
+                    provide its location, description,
+                    priority and an optional photograph.
+                </p>
+
+                <a class="action-btn"
+                   th:href="@{/complaints/new}">
+                    Submit a Complaint
+                </a>
+
+            </div>
+
+            <!-- Student, lecturer and staff -->
+
+            <div class="action-card"
+                 th:if="${isReporter}">
+
+                <h3>My Complaints</h3>
+
+                <p>
+                    View your submitted maintenance
+                    requests, track their status and
+                    edit complaints that are still pending.
+                </p>
+
+                <a class="secondary-btn"
+                   th:href="@{/complaints/mine}">
+                    View My Complaints
+                </a>
+
+            </div>
+
+            <!-- Administrator -->
+
+            <div class="action-card"
+                 th:if="${isAdmin}">
+
+                <h3>Manage Complaints</h3>
+
+                <p>
+                    Review all maintenance requests,
+                    update their status and use Gemini
+                    to review outstanding priorities.
+                </p>
+
+                <a class="secondary-btn"
+                   th:href="@{/complaints}">
+                    Manage Complaints
+                </a>
+
+            </div>
+
+            <!-- Guest -->
+
+            <div class="action-card"
+                 th:if="${!loggedIn}">
+
+                <h3>Account Login</h3>
+
+                <p>
+                    Sign in using your maintenance
+                    portal account to submit or
+                    review maintenance requests.
+                </p>
+
+                <a class="action-btn"
+                   th:href="@{/login}">
+                    Login to Continue
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- Logout -->
+
+        <form class="logout-form"
+              th:if="${loggedIn}"
+              th:action="@{/logout}"
+              method="post">
+
+            <button type="submit">
+                Logout
+            </button>
+
+        </form>
+
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    Faculty of Engineering, University of Ruhuna
+</footer>
 
 </body>
 </html>

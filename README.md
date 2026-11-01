@@ -1,84 +1,237 @@
+
 # University Maintenance Management System
 
 ## Project Overview
 
-The University Maintenance Management System is a web application developed using Spring Boot, Thymeleaf and MySQL.
+The University Maintenance Management System is a Spring Boot web application developed for the Faculty of Engineering, University of Ruhuna.
 
-The system allows university students to report maintenance problems in buildings and laboratories. Administrators can view complaints, manage their status and use Gemini AI to get suggestions about complaint priority, category and the appropriate maintenance team.
+It provides a central platform for reporting, tracking and managing maintenance complaints involving university buildings, classrooms, laboratories, study areas and other facilities.
+
+Students, lecturers and non-academic staff can submit complaints and monitor their progress. Maintenance administrators can manage complaints, record progress updates and receive Gemini AI recommendations.
+
+This application was developed as an academic web application development project.
 
 ## Technologies Used
 
 - Java 17
 - Spring Boot 4
-- Spring MVC and Thymeleaf
+- Spring MVC
+- Thymeleaf
 - Spring Data JPA / Hibernate
 - Spring Security
 - MySQL
-- HTML and CSS
+- HTML, CSS and JavaScript
 - Gemini API
 - Maven
 - Git and GitHub
+- Docker
+- Render for web hosting
+- External MySQL database hosting
 
 ## Main Features
 
-### Student
-- Login using a student account
-- Submit maintenance complaints
-- Select the building and enter the problem location
-- View previously submitted complaints
-- Check complaint status
+### Complaint Submission
 
-### Administrator
-- Login using an administrator account
-- View all submitted complaints
-- Add, edit and delete complaints
-- Update complaint status
-- Search, filter and sort complaints
-- Analyze complaints using Gemini AI
+Authorised users can:
 
-### AI Complaint Analysis
+- Submit maintenance complaints.
+- Enter a title and detailed description.
+- Select a building, floor and room or facility area.
+- Identify the maintenance category.
+- Select the affected equipment or facility item.
+- Select a reported priority.
+- Attach one optional JPG or PNG photograph up to 5 MB.
+- View their own submitted complaints.
 
-The system uses the Gemini API to analyze maintenance complaints.
+### User Roles
 
-Based on the complaint title and description, Gemini suggests a category, priority, maintenance team and a reason for its recommendation.
+The application supports four demonstration account types:
 
-AI suggestions are displayed for administrator review. They do not automatically change the stored complaint.
+| Role | Responsibilities |
+|---|---|
+| Student | Submit, track and edit own pending complaints |
+| Lecturer | Submit, track and edit own pending complaints |
+| Non-Academic Staff | Submit, track and edit own pending complaints |
+| Administrator | Review and manage all complaints |
+
+Personal complaint editing is restricted to the complaint owner while the complaint has PENDING status.
+
+Administrators have access to the complaint management functions.
+
+### Maintenance Administration
+
+Administrators can:
+
+- View all complaints.
+- Search, filter and sort complaint records.
+- Edit complaint information.
+- Change complaint status.
+- Record progress or resolution notes.
+- View uploaded photographs.
+- Delete complaints.
+- Review the recorded status history.
+- Request AI recommendations.
+
+### Complaint Status Tracking
+
+The application uses three main statuses:
+
+1. PENDING
+2. IN_PROGRESS
+3. COMPLETED
+
+Status changes are stored in a separate history table.
+
+Each history record contains:
+
+- Previous status
+- New status
+- Username of the person making the update
+- Date and time
+- Optional maintenance note
+
+Newly submitted complaints also receive an initial status history record.
+
+### Gemini AI Integration
+
+The system provides two AI features.
+
+**Individual Complaint Analysis**
+
+Gemini analyses an individual complaint and suggests a maintenance category, priority, appropriate team and explanation.
+
+**Collective Maintenance Prioritisation**
+
+The administrator can analyse the current pending complaints together.
+
+Gemini recommends up to three maintenance tasks based on reported hazards, seriousness, disruption and available submission history.
+
+The administrator reviews these recommendations before taking action.
+
+AI recommendations are advisory. They do not automatically update the database or assign maintenance personnel.
 
 ## Database Design
 
-The application uses a MySQL database named `university_maintenance`.
+The application uses a relational MySQL database named `university_maintenance`.
 
-The main tables are:
+It has six main entity tables.
 
-**buildings**
-- id (Primary Key)
-- name (Unique)
+### 1. buildings
 
-**complaints**
-- id (Primary Key)
+Stores university buildings and other faculty facilities.
+
+Important columns:
+
+- id — Primary Key
+- name — Unique building name
+
+### 2. rooms
+
+Stores rooms and facility areas within buildings.
+
+Important columns:
+
+- id — Primary Key
+- name
+- floor_number
+- room_type
+- building_id — Foreign Key
+
+A building can contain multiple rooms.
+
+A unique constraint prevents duplicate room names on the same floor within one building.
+
+### 3. maintenance_item_types
+
+Stores the catalogue of equipment and facility items that may require maintenance.
+
+Important columns:
+
+- id — Primary Key
+- name — Unique
+- category
+- active
+
+Examples include fans, lights, projectors, computers, water taps, furniture and air-conditioning equipment.
+
+### 4. complaints
+
+Stores the submitted maintenance requests.
+
+Important columns:
+
+- id — Primary Key
 - title
 - description
 - location
 - category
 - priority
 - status
-- building_id (Foreign Key)
 - submitted_by
+- building_id — Foreign Key, optional
+- floor_number — Optional
+- room_id — Foreign Key, optional
+- maintenance_item_type_id — Foreign Key, optional
 
-One building can have multiple complaints. Each complaint can be associated with one building.
+### 5. complaint_photos
 
-The `submitted_by` field records the username of the account that submitted the complaint.
+Stores the optional photograph associated with a complaint.
 
+Important columns:
 
-### Entity Relationship Diagram
+- id — Primary Key
+- complaint_id — Unique Foreign Key
+- content_type
+- image_data — LONGBLOB
+- uploaded_at
+
+A complaint can have zero or one stored photograph.
+
+### 6. complaint_status_history
+
+Stores the recorded maintenance status updates.
+
+Important columns:
+
+- id — Primary Key
+- complaint_id — Foreign Key
+- old_status
+- new_status
+- changed_by
+- changed_at
+- note
+
+A complaint can have multiple history records.
+
+## Entity Relationship Diagram
 
 ```mermaid
 erDiagram
-    BUILDINGS |o--o{ COMPLAINTS : has
+    BUILDINGS ||--o{ ROOMS : contains
+    BUILDINGS o|--o{ COMPLAINTS : selected_for
+    ROOMS o|--o{ COMPLAINTS : selected_for
+    MAINTENANCE_ITEM_TYPES o|--o{ COMPLAINTS : identifies
+    COMPLAINTS ||--o| COMPLAINT_PHOTOS : has
+    COMPLAINTS ||--o{ COMPLAINT_STATUS_HISTORY : records
 
     BUILDINGS {
         BIGINT id PK
         VARCHAR name UK
+    }
+
+    ROOMS {
+        BIGINT id PK
+        VARCHAR name
+        INT floor_number
+        VARCHAR room_type
+        BIGINT building_id FK
+    }
+
+    MAINTENANCE_ITEM_TYPES {
+        BIGINT id PK
+        VARCHAR name UK
+        VARCHAR category
+        BOOLEAN active
     }
 
     COMPLAINTS {
@@ -89,83 +242,229 @@ erDiagram
         VARCHAR category
         VARCHAR priority
         VARCHAR status
-        BIGINT building_id FK
         VARCHAR submitted_by
+        BIGINT building_id FK
+        INT floor_number
+        BIGINT room_id FK
+        BIGINT maintenance_item_type_id FK
+    }
+
+    COMPLAINT_PHOTOS {
+        BIGINT id PK
+        BIGINT complaint_id FK,UK
+        VARCHAR content_type
+        LONGBLOB image_data
+        DATETIME uploaded_at
+    }
+
+    COMPLAINT_STATUS_HISTORY {
+        BIGINT id PK
+        BIGINT complaint_id FK
+        VARCHAR old_status
+        VARCHAR new_status
+        VARCHAR changed_by
+        DATETIME changed_at
+        VARCHAR note
     }
 ```
 
-The Building and Complaint entities have a many-to-one
-relationship. A building can have several complaints,
-while each complaint can be associated with at most one
-building. The building association is optional.
+The application uses primary keys, foreign keys, unique constraints, appropriate data types and relationships to organise the maintenance information.
 
-## How to Run the Project
+## Project Structure
+
+```text
+src/
+  main/
+    java/com/unimaintenance/maintenance/
+      config/
+      controller/
+      entity/
+      exception/
+      repository/
+      service/
+      UniversityMaintenanceApplication.java
+    resources/
+      static/
+        css/
+        images/
+      templates/
+        complaints/
+      application.properties
+  test/
+    java/com/unimaintenance/maintenance/
+```
+
+## Running Locally
 
 ### Requirements
 
 - Java 17
 - MySQL Server
-- Git
-- An IDE such as VS Code
-- Internet connection for Gemini AI
+- Maven Wrapper (included)
+- VS Code or another Java IDE
+- Internet access for Gemini features
 
-### Setup
+### Database Setup
 
-1. Clone this GitHub repository.
-2. Open the project in VS Code.
-3. Create a MySQL database named `university_maintenance`.
-4. Configure the database connection using environment variables.
-5. Configure the demo login passwords.
-6. Configure a Gemini API key if AI analysis is required.
-7. Open a terminal in the project directory.
-8. Run the application using Maven.
+Create a MySQL database:
 
-Windows command:
+```sql
+CREATE DATABASE IF NOT EXISTS university_maintenance;
+```
 
-`.\mvnw.cmd spring-boot:run`
+The application uses Spring Data JPA and Hibernate to create or update tables during development.
 
-The application runs locally at:
+The local database connection defaults to:
 
-`http://localhost:8080`
+`jdbc:mysql://localhost:3306/university_maintenance`
 
 ### Environment Variables
 
-The application uses these environment variables:
-
 | Variable | Purpose |
 |---|---|
-| DB_PASSWORD | MySQL database password |
-| DB_USERNAME | MySQL database username (optional locally) |
-| DB_URL | MySQL JDBC connection URL (optional locally) |
-| DEMO_STUDENT_PASSWORD | Password for the demonstration student account |
-| DEMO_ADMIN_PASSWORD | Password for the demonstration administrator account |
-| GEMINI_API_KEY | Gemini API key for complaint analysis |
+| DB_URL | JDBC database URL |
+| DB_USERNAME | Database username |
+| DB_PASSWORD | Database password |
+| GEMINI_API_KEY | Gemini API key |
+| DEMO_STUDENT_PASSWORD | Student demo password |
+| DEMO_ADMIN_PASSWORD | Administrator demo password |
+| DEMO_LECTURER_PASSWORD | Lecturer demo password |
+| DEMO_STAFF_PASSWORD | Staff demo password |
+| PORT | Application port, defaults to 8080 |
+| SEED_FACULTY_DATA | Enables faculty building and room initialisation |
+| SEED_MAINTENANCE_TYPES | Enables maintenance item catalogue initialisation |
 
-The local application uses demo accounts named `student1` and `admin`. Their passwords are configured separately and are not included in the repository.
+Student and administrator passwords are required.
 
-Building records should be inserted into the `buildings` table before testing the complaint submission form.
+Lecturer and staff accounts are created when their corresponding passwords are configured.
 
-## Project Structure
+Do not commit passwords, API keys, private certificates or database credentials.
 
-- `entity` — Database entities
-- `repository` — Database access using Spring Data JPA
-- `service` — Application logic and Gemini API integration
-- `controller` — Handles user requests and page navigation
-- `config` — Spring Security configuration
-- `templates` — Thymeleaf HTML pages
-- `static` — CSS files
+### Start the Application
 
-## Current Limitations
+On Windows:
 
-- User accounts are configured in memory for the demonstration.
-- Public user registration is not implemented.
-- AI suggestions require an internet connection and a valid Gemini API key.
-- AI recommendations require human review.
+```powershell
+.\mvnw.cmd spring-boot:run
+```
 
-## Project Documentation
+Then open:
 
-The project documentation includes an ER diagram, screenshots of the main interfaces and a demonstration of the application.
+`http://localhost:8080`
 
-## Author
+### Demo Accounts
 
-University Mini Project — Web Application Development
+| Username | Role |
+|---|---|
+| student1 | Student |
+| lecturer1 | Lecturer |
+| staff1 | Non-Academic Staff |
+| admin | Administrator |
+
+Passwords are supplied through environment variables, not stored in source code.
+
+## Faculty Data Initialisation
+
+The project contains two optional database initialisers.
+
+`FacultyDataInitializer` adds faculty building and room records.
+
+`MaintenanceItemTypeInitializer` adds the maintenance item catalogue.
+
+The initialisers are disabled by default.
+
+To enable them temporarily in a PowerShell session:
+
+```powershell
+$env:SEED_FACULTY_DATA="true"
+$env:SEED_MAINTENANCE_TYPES="true"
+.\mvnw.cmd spring-boot:run
+```
+
+After the initialisation succeeds, stop the application and disable both flags:
+
+```powershell
+$env:SEED_FACULTY_DATA="false"
+$env:SEED_MAINTENANCE_TYPES="false"
+```
+
+The initialisers check for existing entries to avoid inserting the same catalogue records repeatedly.
+
+These commands do not delete existing records.
+
+## Cloud Deployment
+
+The application supports deployment using its root Dockerfile.
+
+The web application can run on Render with an external MySQL database.
+
+Required hosting configuration includes:
+
+- Docker deployment
+- A reachable MySQL database
+- Database connection environment variables
+- Demo account passwords
+- Gemini API key for AI analysis
+- Server port configuration
+
+For Render, the application can use `PORT=10000`.
+
+When deploying to a fresh database, the schema must be created and the faculty and maintenance item catalogue data must be populated.
+
+Keep secrets in hosting environment variables rather than GitHub.
+
+Before deploying database changes, back up existing data.
+
+## Testing
+
+Local verification should cover:
+
+- Successful login for all supported roles
+- Restricted access to administrator routes
+- Complaint creation, updating and deletion
+- Ownership checks on personal complaint editing
+- Building, floor and room selection
+- Affected maintenance item selection
+- JPG and PNG photograph uploads
+- Photograph replacement
+- Complaint status history
+- Individual Gemini analysis
+- Collective Gemini priority recommendations
+- Mobile browser responsiveness
+
+Run the automated unit tests with:
+
+```powershell
+.\mvnw.cmd test
+```
+
+Database-backed workflows must also be tested manually or with separate integration tests.
+
+## Screenshots and Demonstration
+
+The final demonstration should include:
+
+- Home and login pages
+- Complaint submission
+- Personal complaint tracking
+- Administrator complaint dashboard
+- Complaint edit and status history
+- Photograph upload and display
+- Gemini AI prioritisation
+- Mobile responsive layout
+
+Screenshots and the final demonstration video will be added as part of the project submission.
+
+## Limitations
+
+- Accounts are configured in memory for demonstration purposes.
+- Public user registration and password recovery are not implemented.
+- The application is not connected to the university's official authentication service.
+- Gemini requires a configured API key and network access.
+- AI recommendations may be incorrect and require administrator review.
+- Complaint photographs consume MySQL database storage.
+- Maintenance staff assignments are handled outside this application.
+
+## Project Purpose
+
+This project demonstrates Spring MVC, database relationships, CRUD operations, role-based access control, validation, REST API integration, responsive interfaces and deployment of a web application.

@@ -1,93 +1,575 @@
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Complaint Details</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Complaint Details | Faculty Maintenance</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/complaints.css}">
+
+    <style>
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .detail-item {
+            min-width: 0;
+        }
+
+        .detail-label {
+            display: block;
+            margin-bottom: 6px;
+            color: #687687;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .detail-value {
+            color: #24384f;
+            font-size: 15px;
+            overflow-wrap: anywhere;
+        }
+
+        .description-box {
+            padding: 16px;
+            border: 1px solid #e1e6eb;
+            border-radius: 5px;
+            background: #f9fafb;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            line-height: 1.8;
+        }
+
+        .photo-display {
+            margin-top: 14px;
+            padding: 16px;
+            background: #f8f9fb;
+            border: 1px solid #e1e6eb;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .photo-display img {
+            display: block;
+            width: 100%;
+            max-width: 550px;
+            max-height: 420px;
+            margin: 0 auto;
+            object-fit: contain;
+            border-radius: 5px;
+        }
+
+        .photo-caption {
+            margin-top: 11px;
+            font-size: 12px;
+            color: #657587;
+        }
+
+        .history-list {
+            margin-top: 16px;
+            padding-left: 20px;
+            border-left: 2px solid #d9e0e7;
+        }
+
+        .history-entry {
+            position: relative;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e1e6eb;
+            border-radius: 6px;
+            background: #fafbfc;
+        }
+
+        .history-entry::before {
+            content: "";
+            position: absolute;
+            left: -27px;
+            top: 20px;
+            width: 11px;
+            height: 11px;
+            background: #7a2e2e;
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .history-date {
+            font-size: 12px;
+            color: #69798b;
+            margin-bottom: 8px;
+        }
+
+        .history-change {
+            font-weight: bold;
+            color: #263e58;
+            font-size: 14px;
+        }
+
+        .history-user {
+            margin-top: 8px;
+            color: #5d6e80;
+            font-size: 13px;
+        }
+
+        .history-note {
+            margin-top: 12px;
+            padding: 11px 13px;
+            border-left: 3px solid #c0cad5;
+            background: white;
+            color: #405267;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .history-note span {
+            white-space: pre-wrap;
+        }
+
+        .ai-section {
+            margin-top: 26px;
+            padding: 20px;
+            border: 1px solid #dfe5eb;
+            border-radius: 6px;
+            background: #fafbfc;
+        }
+
+        .ai-section h2 {
+            margin: 0 0 10px;
+            color: #1f3552;
+            font-size: 19px;
+        }
+
+        .ai-section p {
+            color: #617184;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .analysis-form {
+            margin-top: 18px;
+        }
+
+        .analysis-form button {
+            margin-top: 0;
+        }
+
+        .analysis-output {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #dfe5eb;
+        }
+
+        .analysis-output .ai-result {
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            line-height: 1.7;
+        }
+
+        .detail-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e9ee;
+        }
+
+        @media (max-width: 600px) {
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 17px;
+            }
+
+            .photo-display,
+            .ai-section {
+                padding: 13px;
+            }
+
+            .detail-actions a {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-<body>
 
-<div class="container">
+<body class="complaint-page">
 
-    <h1>Complaint Details</h1>
+<header class="complaint-header">
 
-    <p>
-        <strong>Complaint ID:</strong>
-        <span th:text="${complaint.id}"></span>
-    </p>
+    <div class="complaint-header-inner">
 
-    <p>
-        <strong>Title:</strong>
-        <span th:text="${complaint.title}"></span>
-    </p>
+        <div class="complaint-brand">
 
-    <p>
-        <strong>Description:</strong>
-    </p>
-    <p th:text="${complaint.description}"></p>
+            <img th:src="@{/images/University_of_Ruhuna_logo.png}"
+                 alt="University of Ruhuna Logo">
 
-    <p>
-        <strong>Location:</strong>
-        <span th:text="${complaint.location}"></span>
-    </p>
+            <img th:src="@{/images/images.jpg}"
+                 alt="Faculty of Engineering Logo">
 
-<p>
-    <strong>Building:</strong>
-    <span th:text="${complaint.building == null ? 'Not assigned' : complaint.building.name}">
-    </span>
-</p>
+            <div class="complaint-brand-text">
+                <small>University of Ruhuna</small>
+                <strong>Faculty of Engineering</strong>
+                <span>Maintenance Management System</span>
+            </div>
 
-    <p>
-        <strong>Category:</strong>
-        <span th:text="${complaint.category}"></span>
-    </p>
+        </div>
 
-    <p>
-        <strong>Priority:</strong>
-        <span th:text="${complaint.priority}"></span>
-    </p>
+        <nav class="complaint-nav">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/complaints}">Manage Complaints</a>
+        </nav>
 
-    <p>
-        <strong>Status:</strong>
-        <span th:text="${complaint.status}"></span>
-    </p>
+    </div>
 
-<hr>
+</header>
 
-<h2>AI Complaint Analysis</h2>
+<main class="complaint-main narrow">
 
-<p>Click below to analyze this complaint using Gemini AI.</p>
+    <div class="complaint-panel">
 
-<form th:action="@{/complaints/{id}/analyze(id=${complaint.id})}"
-      method="post">
-    <button type="submit">Analyze with Gemini</button>
-</form>
+        <div class="complaint-heading">
 
-<div th:if="${aiSuggestion != null}">
-    <h3>Gemini Suggestions</h3>
+            <h1>Complaint Details</h1>
 
-    <pre class="ai-result" th:text="${aiSuggestion}"></pre>
+            <p>
+                Maintenance Request
+                <strong th:text="${'#' + complaint.id}">#1</strong>
+            </p>
 
-    <p>
-        These are AI suggestions only.
-        The maintenance administrator should review them.
-    </p>
-</div>
+        </div>
 
-    <p>
-        <a th:href="@{/complaints/edit/{id}(id=${complaint.id})}">
-            Edit Complaint
-        </a>
-    </p>
+        <!-- Complaint information -->
 
-    <p>
-        <a th:href="@{/complaints}">
-            Back to Complaints
-        </a>
-    </p>
+        <h2 class="complaint-section-title">
+            Complaint Information
+        </h2>
 
-</div>
+        <div class="details-grid">
+
+            <div class="detail-item">
+                <span class="detail-label">Complaint ID</span>
+
+                <span class="detail-value"
+                      th:text="${complaint.id}">1</span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Current Status</span>
+
+                <span class="status-label"
+                      th:classappend="${complaint.status == 'PENDING'
+                        ? 'is-pending'
+                        : (complaint.status == 'IN_PROGRESS'
+                        ? 'is-progress'
+                        : (complaint.status == 'COMPLETED'
+                        ? 'is-completed'
+                        : ''))}"
+                      th:text="${complaint.status == null
+                        ? 'NOT SET'
+                        : #strings.replace(complaint.status, '_', ' ')}">
+                    Pending
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Complaint Title</span>
+
+                <span class="detail-value"
+                      th:text="${complaint.title}">
+                    Broken Projector
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Issue Category</span>
+
+                <span class="detail-value"
+                      th:text="${complaint.category}">
+                    ELECTRICAL
+                </span>
+            </div>
+
+            <!-- New affected item display -->
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Affected Equipment / Facility Item
+                </span>
+
+                <span class="detail-value"
+                      th:text="${complaint.maintenanceItemType == null
+                        ? 'Other / Not specified'
+                        : complaint.maintenanceItemType.name}">
+                    Projector
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Reported Priority</span>
+
+                <span class="detail-value"
+                      th:text="${complaint.priority}">
+                    MEDIUM
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Building</span>
+
+                <span class="detail-value"
+                      th:text="${complaint.building == null
+                        ? 'Not selected'
+                        : complaint.building.name}">
+                    Auditorium Building
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Floor</span>
+
+                <span class="detail-value"
+                      th:switch="${complaint.floorNumber}">
+
+                    <span th:case="0">Ground Floor</span>
+                    <span th:case="1">First Floor</span>
+                    <span th:case="2">Second Floor</span>
+                    <span th:case="3">Third Floor</span>
+                    <span th:case="*">Not specified</span>
+
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Room / Facility Area</span>
+
+                <span class="detail-value"
+                      th:text="${complaint.room == null
+                        ? 'Not selected / Other'
+                        : complaint.room.name}">
+                    Lecture Theatre 1
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Exact Location</span>
+
+                <span class="detail-value"
+                      th:text="${complaint.location}">
+                    Room 205
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Submitted By</span>
+
+                <span class="detail-value"
+                      th:text="${complaint.submittedBy == null
+                        ? 'Not recorded'
+                        : complaint.submittedBy}">
+                    student1
+                </span>
+            </div>
+
+        </div>
+
+        <!-- Problem description -->
+
+        <h2 class="complaint-section-title">
+            Problem Description
+        </h2>
+
+        <div class="description-box"
+             th:text="${complaint.description}">
+            Description of the maintenance problem.
+        </div>
+
+        <!-- Photograph -->
+
+        <section th:if="${hasPhoto == true}">
+
+            <h2 class="complaint-section-title">
+                Attached Photograph
+            </h2>
+
+            <div class="photo-display">
+
+                <img th:src="@{/complaints/{id}/photo(id=${complaint.id})}"
+                     alt="Photograph of the reported maintenance issue">
+
+                <div class="photo-caption">
+                    Photograph attached to this maintenance complaint.
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Status history -->
+
+        <h2 class="complaint-section-title">
+            Maintenance Status History
+        </h2>
+
+        <div class="info-note">
+            Recorded status updates and administrator notes.
+            Times are displayed in UTC.
+        </div>
+
+        <div class="empty-message"
+             th:if="${statusHistory == null
+                 or #lists.isEmpty(statusHistory)}">
+
+            No status updates have been recorded yet.
+
+        </div>
+
+        <div class="history-list"
+             th:if="${statusHistory != null
+                 and !#lists.isEmpty(statusHistory)}">
+
+            <article class="history-entry"
+                     th:each="entry : ${statusHistory}">
+
+                <div class="history-date"
+                     th:text="${#temporals.format(
+                         entry.changedAt, 'dd MMM yyyy, HH:mm'
+                     ) + ' UTC'}">
+                    Date
+                </div>
+
+                <!-- Administrator note without status change -->
+
+                <div class="history-change"
+                     th:if="${entry.oldStatus == entry.newStatus
+                         and entry.note != null}">
+
+                    Maintenance note added
+                    (<span th:text="${#strings.replace(
+                        entry.newStatus, '_', ' '
+                    )}">COMPLETED</span>)
+
+                </div>
+
+                <!-- Actual status change -->
+
+                <div class="history-change"
+                     th:unless="${entry.oldStatus == entry.newStatus
+                         and entry.note != null}">
+
+                    <span th:text="${entry.oldStatus == null
+                        ? 'SUBMITTED'
+                        : #strings.replace(
+                            entry.oldStatus, '_', ' '
+                        )}">
+                        PENDING
+                    </span>
+
+                    <span> &#8594; </span>
+
+                    <span th:text="${#strings.replace(
+                        entry.newStatus, '_', ' '
+                    )}">
+                        IN PROGRESS
+                    </span>
+
+                </div>
+
+                <div class="history-user">
+                    Updated by:
+                    <strong th:text="${entry.changedBy}">
+                        admin
+                    </strong>
+                </div>
+
+                <div class="history-note"
+                     th:if="${entry.note != null
+                         and !#strings.isEmpty(entry.note)}">
+
+                    <strong>Note:</strong>
+
+                    <span th:text="${entry.note}">
+                        Complaint submitted.
+                    </span>
+
+                </div>
+
+            </article>
+
+        </div>
+
+        <!-- Gemini analysis -->
+
+        <section class="ai-section">
+
+            <h2>Gemini AI Analysis</h2>
+
+            <p>
+                Analyse this individual maintenance complaint
+                to receive suggestions about category,
+                priority and maintenance requirements.
+            </p>
+
+            <form class="analysis-form"
+                  th:action="@{/complaints/{id}/analyze(id=${complaint.id})}"
+                  method="post">
+
+                <button class="primary-button"
+                        type="submit">
+                    Analyse Complaint
+                </button>
+
+            </form>
+
+            <div class="analysis-output"
+                 th:if="${aiSuggestion != null}">
+
+                <h3>Gemini Suggestions</h3>
+
+                <div class="ai-result"
+                     th:text="${aiSuggestion}">
+                    AI recommendations
+                </div>
+
+                <p>
+                    AI-generated recommendations should be
+                    reviewed by the maintenance administrator
+                    before taking action.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- Navigation -->
+
+        <div class="detail-actions">
+
+            <a class="primary-button"
+               th:href="@{/complaints/edit/{id}(id=${complaint.id})}">
+                Edit Complaint
+            </a>
+
+            <a class="secondary-button"
+               th:href="@{/complaints}">
+                Back to Complaints
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+<footer class="complaint-footer">
+    Faculty of Engineering, University of Ruhuna
+</footer>
 
 </body>
 </html>

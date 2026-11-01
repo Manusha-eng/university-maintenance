@@ -1,28 +1,131 @@
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Complaint Not Found</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Complaint Not Found | Faculty Maintenance</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/complaints.css}">
+
+    <style>
+        .not-found-content {
+            max-width: 600px;
+            margin: 10px auto;
+            padding: 35px 15px;
+            text-align: center;
+        }
+
+        .not-found-code {
+            margin-bottom: 12px;
+            color: #7a2e2e;
+            font-size: 43px;
+            font-weight: bold;
+        }
+
+        .not-found-content h1 {
+            margin: 0 0 14px;
+            color: #1f3552;
+            font-size: 25px;
+        }
+
+        .not-found-content p {
+            margin-bottom: 25px;
+            color: #617184;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .not-found-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .not-found-content {
+                padding: 25px 5px;
+            }
+
+            .not-found-content h1 {
+                font-size: 22px;
+            }
+
+            .not-found-actions a {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-<body>
 
-<div class="container">
+<body class="complaint-page">
 
-    <h1>Complaint Not Found</h1>
+<header class="complaint-header">
+    <div class="complaint-header-inner">
 
-    <p th:text="${message}">
-        The requested complaint could not be found.
-    </p>
+        <div class="complaint-brand">
 
-    <p>
-        <a th:href="@{/complaints}">
-            Back to Complaints
-        </a>
-    </p>
+            <img th:src="@{/images/University_of_Ruhuna_logo.png}"
+                 alt="University of Ruhuna Logo">
 
-</div>
+            <img th:src="@{/images/images.jpg}"
+                 alt="Faculty of Engineering Logo">
+
+            <div class="complaint-brand-text">
+                <small>University of Ruhuna</small>
+                <strong>Faculty of Engineering</strong>
+                <span>Maintenance Management System</span>
+            </div>
+
+        </div>
+
+        <nav class="complaint-nav">
+            <a th:href="@{/}">Home</a>
+        </nav>
+
+    </div>
+</header>
+
+<main class="complaint-main narrow">
+
+    <div class="complaint-panel">
+
+        <section class="not-found-content">
+
+            <div class="not-found-code">
+                404
+            </div>
+
+            <h1>Complaint Not Found</h1>
+
+            <p th:text="${message != null
+                ? message
+                : 'The requested complaint could not be found.'}">
+                The requested complaint could not be found.
+            </p>
+
+            <div class="not-found-actions">
+
+                <a class="primary-button"
+                   th:href="@{/}">
+                    Back to Home
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+<footer class="complaint-footer">
+    Faculty of Engineering, University of Ruhuna
+</footer>
 
 </body>
 </html>

@@ -1,131 +1,540 @@
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Maintenance Complaints</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Complaints | Faculty Maintenance</title>
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/complaints.css}">
+
+    <style>
+        .priority-panel {
+            margin: 22px 0 28px;
+            padding: 21px;
+            background: #f8f9fb;
+            border: 1px solid #dce2e8;
+            border-radius: 6px;
+        }
+
+        .priority-panel h2 {
+            margin: 0 0 11px;
+            color: #1f3552;
+            font-size: 19px;
+        }
+
+        .priority-panel p {
+            margin: 8px 0 14px;
+            color: #536579;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .pending-count {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 7px 11px;
+            background: #fff4df;
+            border-radius: 4px;
+            color: #825a0a;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .priority-panel form {
+            margin: 0;
+        }
+
+        .priority-panel form button {
+            margin: 0;
+        }
+
+        .priority-hint {
+            margin-top: 12px !important;
+            font-size: 12px !important;
+            color: #6b798a !important;
+        }
+
+        .priority-result {
+            margin-top: 22px;
+            padding-top: 20px;
+            border-top: 1px solid #dce2e8;
+        }
+
+        .priority-result h3 {
+            margin: 0 0 13px;
+            color: #1f3552;
+            font-size: 17px;
+        }
+
+        .priority-result .ai-result {
+            background: #ffffff;
+            border: 1px solid #dce2e8;
+            border-radius: 5px;
+            padding: 17px;
+            color: #263e58;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .priority-reminder {
+            margin-top: 12px;
+            color: #69798b;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .priority-panel {
+                padding: 16px;
+            }
+
+            .priority-panel form button {
+                width: 100%;
+            }
+
+            .priority-result .ai-result {
+                padding: 12px;
+                font-size: 13px;
+            }
+        }
+    </style>
 </head>
-<body>
 
-<div class="container">
+<body class="complaint-page">
 
-    <h1>Maintenance Complaints</h1>
+<header class="complaint-header">
+    <div class="complaint-header-inner">
 
-    <p>
-        <a th:href="@{/}">Home</a> |
-        <a th:href="@{/complaints/new}">Add New Complaint</a>
-    </p>
+        <div class="complaint-brand">
 
-    <h3>Search and Filter</h3>
+            <img th:src="@{/images/University_of_Ruhuna_logo.png}"
+                 alt="University of Ruhuna">
 
-    <form th:action="@{/complaints}" method="get">
+            <img th:src="@{/images/images.jpg}"
+                 alt="Faculty of Engineering">
 
-        <label for="keyword">Search Complaints</label>
-        <input type="text"
-               id="keyword"
-               name="keyword"
-               placeholder="Title, description or location"
-               th:value="${keyword}">
+            <div class="complaint-brand-text">
+                <small>University of Ruhuna</small>
+                <strong>Faculty of Engineering</strong>
+                <span>Maintenance Management System</span>
+            </div>
 
-        <label for="status">Filter by Status</label>
-        <select id="status" name="status">
-            <option value="" th:selected="${selectedStatus == ''}">
-                All Statuses
-            </option>
-            <option value="PENDING"
-                    th:selected="${selectedStatus == 'PENDING'}">
-                Pending
-            </option>
-            <option value="IN_PROGRESS"
-                    th:selected="${selectedStatus == 'IN_PROGRESS'}">
-                In Progress
-            </option>
-            <option value="COMPLETED"
-                    th:selected="${selectedStatus == 'COMPLETED'}">
-                Completed
-            </option>
-        </select>
+        </div>
 
-        <label for="sortBy">Sort By</label>
-        <select id="sortBy" name="sortBy">
-            <option value="newest"
-                    th:selected="${sortBy == 'newest'}">
-                Newest First
-            </option>
-            <option value="oldest"
-                    th:selected="${sortBy == 'oldest'}">
-                Oldest First
-            </option>
-            <option value="title_az"
-                    th:selected="${sortBy == 'title_az'}">
-                Title A to Z
-            </option>
-            <option value="title_za"
-                    th:selected="${sortBy == 'title_za'}">
-                Title Z to A
-            </option>
-        </select>
+        <nav class="complaint-nav">
+            <a th:href="@{/}">Home</a>
 
-        <button type="submit">Apply</button>
-        <a th:href="@{/complaints}">Clear Filters</a>
+            <a th:href="@{/complaints/new}">
+                New Complaint
+            </a>
+        </nav>
 
-    </form>
+    </div>
+</header>
 
-    <h3>Complaint List</h3>
+<main class="complaint-main">
 
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Location</th>
-                    <th>Category</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
+    <div class="complaint-panel">
 
-            <tbody>
-                <tr th:each="complaint : ${complaints}">
-                    <td th:text="${complaint.id}"></td>
-                    <td th:text="${complaint.title}"></td>
-                    <td th:text="${complaint.location}"></td>
-                    <td th:text="${complaint.category}"></td>
-                    <td th:text="${complaint.priority}"></td>
-                    <td th:text="${complaint.status}"></td>
+        <div class="complaint-heading">
 
-                    <td>
-                        <div class="actions">
+            <h1>Manage Maintenance Complaints</h1>
 
-                            <a th:href="@{/complaints/{id}(id=${complaint.id})}">
-                                View
-                            </a>
+            <p>
+                Review, search and manage maintenance
+                requests submitted within the faculty.
+            </p>
 
-                            <a th:href="@{/complaints/edit/{id}(id=${complaint.id})}">
-                                Edit
-                            </a>
+        </div>
 
-                            <form th:action="@{/complaints/delete/{id}(id=${complaint.id})}"
-                                  method="post"
-                                  onsubmit="return confirm('Delete this complaint?');">
-                                <button type="submit">Delete</button>
-                            </form>
+        <!-- New collective Gemini analysis -->
 
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <section class="priority-panel">
+
+            <h2>AI Maintenance Priority Review</h2>
+
+            <p>
+                Analyse all currently pending complaints
+                and receive Gemini's recommendations for
+                the three most urgent maintenance tasks.
+            </p>
+
+            <div class="pending-count">
+                Pending Complaints:
+                <span th:text="${pendingCount != null
+                    ? pendingCount
+                    : 0}">
+                    0
+                </span>
+            </div>
+
+            <form th:action="@{/complaints/analyze-pending}"
+                  method="post">
+
+                <button type="submit"
+                        class="primary-button"
+                        id="analyzePendingButton"
+                        th:disabled="${pendingCount == null
+                            or pendingCount == 0}">
+
+                    Analyse All Pending Complaints
+
+                </button>
+
+            </form>
+
+            <p class="priority-hint">
+                Only pending complaints will be included.
+                Completed and in-progress work is excluded.
+                The analysis does not change any complaint
+                records.
+            </p>
+
+            <!-- Gemini result -->
+
+            <div class="priority-result"
+                 th:if="${priorityAnalysis != null}">
+
+                <h3>Gemini Recommended Priorities</h3>
+
+                <div class="ai-result"
+                     th:text="${priorityAnalysis}">
+                    Gemini recommendations
+                </div>
+
+                <div class="priority-reminder">
+                    These recommendations are AI-generated.
+                    The maintenance administrator must verify
+                    the urgency and decide the next action.
+                    For immediate hazards, follow faculty
+                    safety procedures.
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Existing search and filters -->
+
+        <h2 class="complaint-section-title">
+            Search and Filter
+        </h2>
+
+        <section class="filter-panel">
+
+            <form class="filter-form"
+                  th:action="@{/complaints}"
+                  method="get">
+
+                <div class="filter-grid">
+
+                    <div class="filter-field">
+
+                        <label for="keyword">
+                            Search Complaints
+                        </label>
+
+                        <input type="text"
+                               id="keyword"
+                               name="keyword"
+                               placeholder="Search title, description or location"
+                               th:value="${keyword}">
+
+                    </div>
+
+                    <div class="filter-field">
+
+                        <label for="status">
+                            Status
+                        </label>
+
+                        <select id="status" name="status">
+
+                            <option value=""
+                                    th:selected="${selectedStatus == ''}">
+                                All Statuses
+                            </option>
+
+                            <option value="PENDING"
+                                    th:selected="${selectedStatus == 'PENDING'}">
+                                Pending
+                            </option>
+
+                            <option value="IN_PROGRESS"
+                                    th:selected="${selectedStatus == 'IN_PROGRESS'}">
+                                In Progress
+                            </option>
+
+                            <option value="COMPLETED"
+                                    th:selected="${selectedStatus == 'COMPLETED'}">
+                                Completed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="filter-field">
+
+                        <label for="sortBy">
+                            Sort By
+                        </label>
+
+                        <select id="sortBy" name="sortBy">
+
+                            <option value="newest"
+                                    th:selected="${sortBy == 'newest'}">
+                                Newest First
+                            </option>
+
+                            <option value="oldest"
+                                    th:selected="${sortBy == 'oldest'}">
+                                Oldest First
+                            </option>
+
+                            <option value="title_az"
+                                    th:selected="${sortBy == 'title_az'}">
+                                Title A to Z
+                            </option>
+
+                            <option value="title_za"
+                                    th:selected="${sortBy == 'title_za'}">
+                                Title Z to A
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="filter-actions">
+
+                    <button type="submit"
+                            class="primary-button">
+                        Apply Filters
+                    </button>
+
+                    <a class="secondary-button"
+                       th:href="@{/complaints}">
+                        Clear
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <!-- Complaint records -->
+
+        <h2 class="complaint-section-title">
+            Complaint Records
+        </h2>
+
+        <div th:if="${#lists.isEmpty(complaints)}"
+             class="empty-message">
+            No matching complaints found.
+        </div>
+
+        <!-- Desktop table -->
+
+        <div class="desktop-records"
+             th:unless="${#lists.isEmpty(complaints)}">
+
+            <div class="table-wrapper">
+
+                <table class="complaint-list-table">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Complaint</th>
+                            <th>Location</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr th:each="complaint : ${complaints}">
+
+                            <td th:text="${complaint.id}">
+                                1
+                            </td>
+
+                            <td class="record-title"
+                                th:text="${complaint.title}">
+                                Complaint title
+                            </td>
+
+                            <td th:text="${complaint.location}">
+                                Location
+                            </td>
+
+                            <td th:text="${complaint.category}">
+                                Category
+                            </td>
+
+                            <td th:text="${complaint.priority}">
+                                Priority
+                            </td>
+
+                            <td>
+                                <span class="status-label"
+                                      th:classappend="${complaint.status == 'PENDING'
+                                        ? 'is-pending'
+                                        : (complaint.status == 'IN_PROGRESS'
+                                        ? 'is-progress'
+                                        : 'is-completed')}"
+                                      th:text="${#strings.replace(
+                                          complaint.status,
+                                          '_',
+                                          ' '
+                                      )}">
+                                    Status
+                                </span>
+                            </td>
+
+                            <td>
+
+                                <div class="record-actions">
+
+                                    <a th:href="@{/complaints/{id}(id=${complaint.id})}">
+                                        View
+                                    </a>
+
+                                    <a th:href="@{/complaints/edit/{id}(id=${complaint.id})}">
+                                        Edit
+                                    </a>
+
+                                    <form th:action="@{/complaints/delete/{id}(id=${complaint.id})}"
+                                          method="post"
+                                          onsubmit="return confirm('Delete this complaint?');">
+
+                                        <button type="submit"
+                                                class="danger-button">
+                                            Delete
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- Mobile complaint cards -->
+
+        <div class="mobile-records"
+             th:unless="${#lists.isEmpty(complaints)}">
+
+            <article class="mobile-record"
+                     th:each="complaint : ${complaints}">
+
+                <h3 th:text="${complaint.title}">
+                    Complaint title
+                </h3>
+
+                <p>
+                    <strong>ID:</strong>
+                    <span th:text="${complaint.id}">
+                        1
+                    </span>
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    <span th:text="${complaint.location}">
+                        Location
+                    </span>
+                </p>
+
+                <p>
+                    <strong>Category:</strong>
+                    <span th:text="${complaint.category}">
+                        Category
+                    </span>
+                </p>
+
+                <p>
+                    <strong>Priority:</strong>
+                    <span th:text="${complaint.priority}">
+                        Priority
+                    </span>
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+
+                    <span class="status-label"
+                          th:classappend="${complaint.status == 'PENDING'
+                            ? 'is-pending'
+                            : (complaint.status == 'IN_PROGRESS'
+                            ? 'is-progress'
+                            : 'is-completed')}"
+                          th:text="${#strings.replace(
+                              complaint.status,
+                              '_',
+                              ' '
+                          )}">
+                        Status
+                    </span>
+                </p>
+
+                <div class="record-actions">
+
+                    <a th:href="@{/complaints/{id}(id=${complaint.id})}">
+                        View
+                    </a>
+
+                    <a th:href="@{/complaints/edit/{id}(id=${complaint.id})}">
+                        Edit
+                    </a>
+
+                    <form th:action="@{/complaints/delete/{id}(id=${complaint.id})}"
+                          method="post"
+                          onsubmit="return confirm('Delete this complaint?');">
+
+                        <button type="submit"
+                                class="danger-button">
+                            Delete
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </article>
+
+        </div>
+
     </div>
 
-    <p th:if="${#lists.isEmpty(complaints)}">
-        No matching complaints found.
-    </p>
+</main>
 
-</div>
+<footer class="complaint-footer">
+    Faculty of Engineering, University of Ruhuna
+</footer>
 
 </body>
 </html>

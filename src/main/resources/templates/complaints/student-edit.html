@@ -1,0 +1,565 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit My Complaint | Faculty Maintenance</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/complaints.css}">
+
+    <style>
+        .student-edit-note {
+            padding: 14px 16px;
+            margin-bottom: 22px;
+            background: #f8f9fb;
+            border-left: 3px solid #7a2e2e;
+            color: #526477;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .student-photo-box {
+            margin-top: 12px;
+            padding: 16px;
+            border: 1px solid #e0e5eb;
+            border-radius: 6px;
+            background: #fafbfc;
+        }
+
+        .student-photo-box img {
+            display: block;
+            width: 100%;
+            max-width: 340px;
+            max-height: 260px;
+            margin-top: 13px;
+            object-fit: contain;
+            border: 1px solid #dce2e8;
+            border-radius: 5px;
+        }
+
+        .student-photo-box p {
+            font-size: 13px;
+            line-height: 1.7;
+            color: #657587;
+        }
+    </style>
+</head>
+
+<body class="complaint-page">
+
+<header class="complaint-header">
+    <div class="complaint-header-inner">
+
+        <div class="complaint-brand">
+
+            <img th:src="@{/images/University_of_Ruhuna_logo.png}"
+                 alt="University of Ruhuna Logo">
+
+            <img th:src="@{/images/images.jpg}"
+                 alt="Faculty of Engineering Logo">
+
+            <div class="complaint-brand-text">
+                <small>University of Ruhuna</small>
+                <strong>Faculty of Engineering</strong>
+                <span>Maintenance Management System</span>
+            </div>
+
+        </div>
+
+        <nav class="complaint-nav">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/complaints/mine}">My Complaints</a>
+        </nav>
+
+    </div>
+</header>
+
+<main class="complaint-main narrow">
+
+    <div class="complaint-panel">
+
+        <div class="complaint-heading">
+
+            <h1>Edit My Complaint</h1>
+
+            <p>
+                Maintenance Request
+                <strong th:text="${'#' + complaint.id}">#1</strong>
+            </p>
+
+        </div>
+
+        <div class="student-edit-note">
+            You can edit your complaint while it is Pending.
+            Once the maintenance administrator starts processing
+            the request, editing is no longer available.
+        </div>
+
+        <form class="complaint-form"
+              th:object="${complaint}"
+              th:action="@{/complaints/my/update/{id}(id=${complaint.id})}"
+              method="post"
+              enctype="multipart/form-data">
+
+            <!-- Section 1 -->
+
+            <h2 class="complaint-section-title">
+                1. Complaint Information
+            </h2>
+
+            <div class="form-group">
+
+                <label for="title">
+                    Complaint Title
+                    <span class="required-mark">*</span>
+                </label>
+
+                <input type="text"
+                       id="title"
+                       th:field="*{title}"
+                       maxlength="150"
+                       required>
+
+                <p class="form-error"
+                   th:if="${#fields.hasErrors('title')}"
+                   th:errors="*{title}">
+                </p>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                    <span class="required-mark">*</span>
+                </label>
+
+                <textarea id="description"
+                          th:field="*{description}"
+                          maxlength="2000"
+                          rows="5"
+                          required></textarea>
+
+                <p class="form-error"
+                   th:if="${#fields.hasErrors('description')}"
+                   th:errors="*{description}">
+                </p>
+
+            </div>
+
+            <!-- Section 2 -->
+
+            <h2 class="complaint-section-title">
+                2. Location Information
+            </h2>
+
+            <div class="form-group">
+
+                <label for="buildingId">
+                    Building
+                </label>
+
+                <select id="buildingId"
+                        name="buildingId">
+
+                    <option value="">
+                        -- Select Building --
+                    </option>
+
+                    <option th:each="building : ${buildings}"
+                            th:value="${building.id}"
+                            th:text="${building.name}"
+                            th:selected="${selectedBuildingId != null
+                                and selectedBuildingId == building.id}">
+                        Building
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="floorNumber">
+                        Floor
+                    </label>
+
+                    <select id="floorNumber"
+                            th:field="*{floorNumber}">
+
+                        <option value="">
+                            -- Select Floor --
+                        </option>
+
+                        <option value="0">Ground Floor</option>
+                        <option value="1">First Floor</option>
+                        <option value="2">Second Floor</option>
+                        <option value="3">Third Floor</option>
+
+                    </select>
+
+                    <p class="form-error"
+                       th:if="${#fields.hasErrors('floorNumber')}"
+                       th:errors="*{floorNumber}">
+                    </p>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="roomId">
+                        Room / Facility Area
+                    </label>
+
+                    <select id="roomId"
+                            name="roomId">
+
+                        <option value="">
+                            -- Other / Not Listed --
+                        </option>
+
+                        <option th:each="room : ${rooms}"
+                                th:value="${room.id}"
+                                th:text="${room.name}"
+                                th:data-building-id="${room.building.id}"
+                                th:data-floor-number="${room.floorNumber}"
+                                th:selected="${selectedRoomId != null
+                                    and selectedRoomId == room.id}">
+                            Room
+                        </option>
+
+                    </select>
+
+                    <span class="form-hint">
+                        Rooms are filtered according to
+                        the selected building and floor.
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="location">
+                    Exact Location
+                    <span class="required-mark">*</span>
+                </label>
+
+                <input type="text"
+                       id="location"
+                       th:field="*{location}"
+                       maxlength="150"
+                       required>
+
+                <span class="form-hint">
+                    Provide a room number or equipment
+                    position if needed.
+                </span>
+
+                <p class="form-error"
+                   th:if="${#fields.hasErrors('location')}"
+                   th:errors="*{location}">
+                </p>
+
+            </div>
+
+            <!-- Section 3 -->
+
+            <h2 class="complaint-section-title">
+                3. Maintenance Classification
+            </h2>
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="category">
+                        Issue Category
+                    </label>
+
+                    <select id="category"
+                            th:field="*{category}">
+
+                        <option value="ELECTRICAL">
+                            Electrical
+                        </option>
+
+                        <option value="PLUMBING">
+                            Plumbing
+                        </option>
+
+                        <option value="FURNITURE">
+                            Furniture
+                        </option>
+
+                        <option value="NETWORK">
+                            Network / IT
+                        </option>
+
+                        <option value="AIR_CONDITIONING">
+                            Air Conditioning
+                        </option>
+
+                        <option value="OTHER">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="priority">
+                        Reported Priority
+                    </label>
+
+                    <select id="priority"
+                            th:field="*{priority}">
+
+                        <option value="LOW">Low</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="HIGH">High</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <!-- New equipment dropdown -->
+
+            <div class="form-group">
+
+                <label for="itemTypeId">
+                    Affected Equipment / Facility Item
+                </label>
+
+                <select id="itemTypeId"
+                        name="itemTypeId">
+
+                    <option value="">
+                        -- Other / Not Listed --
+                    </option>
+
+                    <option th:each="item : ${itemTypes}"
+                            th:value="${item.id}"
+                            th:text="${item.name}"
+                            th:data-category="${item.category}"
+                            th:selected="${selectedItemTypeId != null
+                                and selectedItemTypeId == item.id}">
+                        Equipment
+                    </option>
+
+                </select>
+
+                <span class="form-hint">
+                    Optional. Select the item involved
+                    in the maintenance problem.
+                    The list changes with the issue category.
+                </span>
+
+            </div>
+
+            <!-- Section 4 -->
+
+            <h2 class="complaint-section-title">
+                4. Complaint Photograph
+            </h2>
+
+            <div class="student-photo-box">
+
+                <div class="form-group">
+
+                    <label for="photo">
+                        Upload or Replace Photograph
+                    </label>
+
+                    <input type="file"
+                           id="photo"
+                           name="photo"
+                           accept="image/jpeg,image/png">
+
+                    <p>
+                        Optional. JPG or PNG only.
+                        Maximum size: 5 MB.
+                        Leave empty to keep the existing image.
+                    </p>
+
+                </div>
+
+                <div th:if="${hasPhoto == true}">
+
+                    <p><strong>Current Photograph</strong></p>
+
+                    <img th:src="@{/complaints/my/photo/{id}(id=${complaint.id})}"
+                         alt="Current complaint photograph">
+
+                </div>
+
+            </div>
+
+            <!-- Validation errors -->
+
+            <p class="form-error"
+               th:each="error : ${#fields.globalErrors()}"
+               th:text="${error}">
+            </p>
+
+            <!-- Buttons -->
+
+            <div class="form-actions">
+
+                <button class="primary-button"
+                        type="submit">
+                    Save My Changes
+                </button>
+
+                <a class="secondary-button"
+                   th:href="@{/complaints/mine}">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+<footer class="complaint-footer">
+    Faculty of Engineering, University of Ruhuna
+</footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Building, floor and room selection
+
+        const buildingSelect =
+            document.getElementById("buildingId");
+
+        const floorSelect =
+            document.getElementById("floorNumber");
+
+        const roomSelect =
+            document.getElementById("roomId");
+
+        const initialRoomId = roomSelect.value;
+
+        const allRooms = Array.from(roomSelect.options)
+            .filter(option => option.value !== "")
+            .map(option => ({
+                id: option.value,
+                name: option.textContent.trim(),
+                buildingId: option.dataset.buildingId,
+                floorNumber: option.dataset.floorNumber
+            }));
+
+        function updateRooms(keepExisting) {
+
+            const selectedRoom =
+                keepExisting ? initialRoomId : "";
+
+            roomSelect.replaceChildren(
+                new Option("-- Other / Not Listed --", "")
+            );
+
+            for (const room of allRooms) {
+
+                if (room.buildingId === buildingSelect.value
+                    && room.floorNumber === floorSelect.value) {
+
+                    roomSelect.add(
+                        new Option(room.name, room.id)
+                    );
+                }
+            }
+
+            const found = Array.from(roomSelect.options)
+                .some(option =>
+                    option.value === selectedRoom
+                );
+
+            roomSelect.value = found ? selectedRoom : "";
+
+            roomSelect.disabled =
+                roomSelect.options.length <= 1;
+        }
+
+        buildingSelect.addEventListener("change", function () {
+            floorSelect.value = "";
+            updateRooms(false);
+        });
+
+        floorSelect.addEventListener("change", function () {
+            updateRooms(false);
+        });
+
+        updateRooms(true);
+
+        // Issue category and affected item selection
+
+        const categorySelect =
+            document.getElementById("category");
+
+        const itemSelect =
+            document.getElementById("itemTypeId");
+
+        const initialItemId = itemSelect.value;
+
+        const allItems = Array.from(itemSelect.options)
+            .filter(option => option.value !== "")
+            .map(option => ({
+                id: option.value,
+                name: option.textContent.trim(),
+                category: option.dataset.category
+            }));
+
+        function updateItems(keepExisting) {
+
+            const selectedItem =
+                keepExisting ? initialItemId : "";
+
+            itemSelect.replaceChildren(
+                new Option("-- Other / Not Listed --", "")
+            );
+
+            for (const item of allItems) {
+
+                if (item.category === categorySelect.value) {
+
+                    itemSelect.add(
+                        new Option(item.name, item.id)
+                    );
+                }
+            }
+
+            const found = Array.from(itemSelect.options)
+                .some(option =>
+                    option.value === selectedItem
+                );
+
+            itemSelect.value = found ? selectedItem : "";
+        }
+
+        categorySelect.addEventListener("change", function () {
+            updateItems(false);
+        });
+
+        updateItems(true);
+
+    });
+</script>
+
+</body>
+</html>
